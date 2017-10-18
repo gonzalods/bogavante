@@ -1,4 +1,4 @@
-package org.gms.bogavante.connector.http.parser;
+package org.gms.bogavante.connector.http.header.parser;
 
 import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequest;

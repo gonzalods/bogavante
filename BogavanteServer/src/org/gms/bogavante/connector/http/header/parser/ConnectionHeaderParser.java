@@ -1,22 +1,22 @@
-package org.gms.bogavante.connector.http.parser;
+package org.gms.bogavante.connector.http.header.parser;
 
 import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequest;
 
 /*
- * RFC 7230 5.7.1. Via
- * The "Via" header field indicates the presence of intermediate 
- * protocols and recipients between the user agent and the server (on 
- * requests) or between the origin server and the client (on responses)
- * Via 				 	= 1#( received-protocol RWS received-by [ RWS comment ] ) 
- * received-protocol 	= [ protocol-name "/" ] protocol-version 
- * received-by 			= ( uri-host [ ":" port ] ) / pseudonym
- * pseudonym 			= token
+ * RFC 7230 6.1. Connection
+ * The "Connection" header field allows the sender to indicate desired control 
+ * options for the current connection
+ * 	Connection 			= 1#connection-option 
+ * 	connection-option 	= token
+ * Connection options are case-insensitive.
  */
-public class ViaHeaderParser implements HeaderParserChain {
+public class ConnectionHeaderParser implements HeaderParserChain {
 
-	private String headerName = "via";
+	private String headerName = "connection";
 	private HeaderParserChain nextParser;
+
+	
 	@Override
 	public void parse(HttpHeader header, HttpRequest request) {
 		String reequestHeader = header.getHeader_name();
@@ -26,17 +26,19 @@ public class ViaHeaderParser implements HeaderParserChain {
 				//TODO decidir que lógica implemantar cuando viene la cabecera duplicada.
 			}
 			String[] tCodings = ValidatorAndParseHeader
-					.parseCommaDelimitedList(header.getHeader_value(),false);
+					.parseCommaDelimitedList(header.getHeader_value(),true);
 			
 			request.setHeader(header.getHeader_name(), tCodings);
 		}else{
 			nextParser.parse(header, request);
 		}
+
 	}
 
 	@Override
 	public void nextParseHeader(HeaderParserChain headerParser) {
 		this.nextParser = headerParser;
+
 	}
 
 }

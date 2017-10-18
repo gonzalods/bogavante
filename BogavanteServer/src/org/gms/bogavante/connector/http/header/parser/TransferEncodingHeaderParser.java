@@ -1,4 +1,4 @@
-package org.gms.bogavante.connector.http.parser;
+package org.gms.bogavante.connector.http.header.parser;
 
 import java.util.Arrays;
 import java.util.Collections;

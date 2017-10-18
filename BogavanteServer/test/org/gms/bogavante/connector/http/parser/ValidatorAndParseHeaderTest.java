@@ -3,6 +3,7 @@ package org.gms.bogavante.connector.http.parser;
 import static org.junit.Assert.*;
 
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.header.parser.ValidatorAndParseHeader;
 
 import static org.hamcrest.CoreMatchers.*;
 

@@ -7,6 +7,8 @@ import static org.mockito.Mockito.*;
 import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.header.parser.HeaderParserChain;
+import org.gms.bogavante.connector.http.header.parser.HostHeaderParser;
 import org.junit.Test;
 
 public class HostHeaderParserTest {

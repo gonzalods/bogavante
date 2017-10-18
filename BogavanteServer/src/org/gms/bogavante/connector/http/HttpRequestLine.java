@@ -1,5 +1,8 @@
 package org.gms.bogavante.connector.http;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class HttpRequestLine {
 
 	public static final int MAX_LENGTH_LINE = 32768;
@@ -14,7 +17,7 @@ public class HttpRequestLine {
 	}
 	
 	/*
-	 * RFC 7230 apartado 3.1.1 Request Line
+	 * RFC 7230 - 3.1.1 Request Line
 	 * request-line = method SP request-target SP HTTP-version CRLF
 	 */
 	public void parseLine(char[] buf, int length){
@@ -36,11 +39,28 @@ public class HttpRequestLine {
 		}
 		method = components[0];
 		request_target = components[1];
-		if(request_target.length() > MAX_LENGTH_URI)
-			throw new HttpRequestParseException(414, "URI Too Long");
+		validateRequestTarget();
 		HTTP_version = components[2];
+		validateVersion();
 	}
 
+	private void validateRequestTarget(){
+		if(request_target.length() > MAX_LENGTH_URI)
+			throw new HttpRequestParseException(414, "URI Too Long");
+	}
+	
+	/*
+	 * RFC 7230 - 2.6. Protocol Versioning
+	 * 	 HTTP-version 		= HTTP-name "/" DIGIT "." DIGIT 
+	 *   HTTP-name 			= %x48.54.54.50 ; "HTTP", case-sensitive
+	 */
+	private void validateVersion(){
+		Pattern pattern = Pattern.compile("HTTP/\\d\\.\\d");
+		Matcher matcher = pattern.matcher(HTTP_version);
+		if(!matcher.matches()){
+			throw new HttpRequestParseException(400, "Bad Request");
+		}
+	}
 	
 	public String getMethod() {
 		return method;

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.header.parser.TransferEncodingHeaderParser;
 import org.junit.Test;
 
 public class TransferEncodingParserTest {

@@ -1,4 +1,4 @@
-package org.gms.bogavante.connector.http.parser;
+package org.gms.bogavante.connector.http.header.parser;
 
 public interface TransferCodingConstants {
 

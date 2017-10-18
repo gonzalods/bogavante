@@ -9,13 +9,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.gms.bogavante.connector.http.processor.http1.Http1Processor;
 import org.junit.Test;
 
 public class HttpProcessorTest {
 
 	@Test
 	public void testEmptyRequest() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "";
 		Socket socket = mock(Socket.class);
 		
@@ -38,7 +39,7 @@ public class HttpProcessorTest {
 	
 	@Test
 	public void testBadRequestLine() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET /\r\n";
 		Socket socket = mock(Socket.class);
 		
@@ -61,7 +62,7 @@ public class HttpProcessorTest {
 
 	@Test
 	public void testBadOnlyRequestLine() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET / HTTP/1.1\r\n";
 		Socket socket = mock(Socket.class);
 		
@@ -84,7 +85,7 @@ public class HttpProcessorTest {
 	
 	@Test
 	public void testOnlyRequestLine() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET / HTTP/1.1\r\n\r\n";
 		Socket socket = mock(Socket.class);
 		
@@ -107,7 +108,7 @@ public class HttpProcessorTest {
 	
 	@Test
 	public void testBadHeader() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET / HTTP/1.1\r\nContent-Type : text/html\r\n\r\n";
 		Socket socket = mock(Socket.class);
 		
@@ -130,7 +131,7 @@ public class HttpProcessorTest {
 	
 	@Test
 	public void testOneHeader() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET / HTTP/1.1\r\nContent-Type: text/html\r\n\r\n";
 		Socket socket = mock(Socket.class);
 		
@@ -153,7 +154,7 @@ public class HttpProcessorTest {
 	
 	@Test
 	public void testTwoHeader() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET / HTTP/1.1\r\nContent-Type: text/html\r\nHost: www.google.es\r\n\r\n";
 		Socket socket = mock(Socket.class);
 		
@@ -176,7 +177,7 @@ public class HttpProcessorTest {
 	
 	@Test
 	public void testTwoHeaderWithObsFold() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
+		Http1Processor processor = new Http1Processor(null);
 		String request = "GET / HTTP/1.1\r\nContent-Type: text/html,\r\n */*\r\nHost: www.google.es\r\n\r\n";
 		Socket socket = mock(Socket.class);
 		
