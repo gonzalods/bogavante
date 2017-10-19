@@ -1,7 +1,6 @@
 package org.gms.bogavante.connector.http;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -39,11 +38,5 @@ public class HttpConnector implements Runnable{
 			System.exit(-1);
 		}
 		
-	}
-	
-	private String createStatusLine(int code, String message){
-		StringBuilder statusLine = new StringBuilder("HTTP/1.1 ")
-				.append(code).append(' ').append(message).append("\r\n");
-		return statusLine.toString();
 	}
 }
