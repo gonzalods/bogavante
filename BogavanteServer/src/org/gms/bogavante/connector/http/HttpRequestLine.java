@@ -12,10 +12,6 @@ public class HttpRequestLine {
 	private String request_target;
 	private String HTTP_version;
 	
-	public int indexOf(String str){
-		return 0	;
-	}
-	
 	/*
 	 * RFC 7230 - 3.1.1 Request Line
 	 * request-line = method SP request-target SP HTTP-version CRLF

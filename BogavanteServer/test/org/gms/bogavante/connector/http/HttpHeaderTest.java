@@ -11,39 +11,6 @@ import org.junit.Test;
 public class HttpHeaderTest {
 
 	@Test
-	public void headerEmptyTest() throws IOException{
-		String request = "";
-		ByteArrayInputStream in = new ByteArrayInputStream(request.getBytes());
-		SocketInputStream sis = new SocketInputStream(in, 64);
-		HttpHeader headerLine = new HttpHeader();
-		int code = 200;
-		String text = "OK";
-
-		try{
-			sis.readHeader(headerLine);
-		}catch(HttpRequestParseException e){
-			code = e.getCodeError();
-			text = e.getMessage();
-		}
-		assertThat(code, is(400));
-		assertThat(text, is("Bad Request"));
-		sis.close();
-	}
-	
-	@Test
-	public void headerFinalTest() throws IOException{
-		String request = "\r\n";
-		ByteArrayInputStream in = new ByteArrayInputStream(request.getBytes());
-		SocketInputStream sis = new SocketInputStream(in, 64);
-		HttpHeader headerLine = new HttpHeader();
-
-		sis.readHeader(headerLine);
-		
-		assertNull(headerLine.getHeader_name());
-		sis.close();
-	}
-
-	@Test
 	public void headerSimpleTest() throws IOException{
 		String request = "ContentType: text/html\r\n";
 		ByteArrayInputStream in = new ByteArrayInputStream(request.getBytes());
@@ -53,7 +20,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is("text/html"));
 		
 		sis.close();
@@ -69,7 +35,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is(""));
 		
 		sis.close();
@@ -85,7 +50,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is("text/html:text/plain"));
 		
 		sis.close();
@@ -101,7 +65,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(true));
 		assertThat(headerLine.getHeader_value(),is("text/html, */*"));
 		
 		sis.close();
@@ -117,7 +80,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is("text/html"));
 		
 		headerLine = new HttpHeader();
@@ -139,7 +101,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is("text/html"));
 		
 		headerLine = new HttpHeader();
@@ -147,7 +108,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("Host"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is("www.google.es"));
 		
 		sis.close();
@@ -164,7 +124,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("ContentType"));
-		assertThat(headerLine.isObs_fold(),is(true));
 		assertThat(headerLine.getHeader_value(),is("text/html; */*"));
 		
 		headerLine = new HttpHeader();
@@ -172,7 +131,6 @@ public class HttpHeaderTest {
 		sis.readHeader(headerLine);
 		
 		assertThat(headerLine.getHeader_name(),is("Host"));
-		assertThat(headerLine.isObs_fold(),is(false));
 		assertThat(headerLine.getHeader_value(),is("www.google.es"));
 		
 		sis.close();

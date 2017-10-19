@@ -11,15 +11,15 @@ public class HttpHeader {
 	
 	private String header_name;
 	private String header_value;
-	private boolean isObs_fold;
-	
-	public boolean isObs_fold() {
-		return isObs_fold;
-	}
-
-	public void setObs_fold(boolean isObs_fold) {
-		this.isObs_fold = isObs_fold;
-	}
+//	private boolean isObs_fold;
+//	
+//	public boolean isObs_fold() {
+//		return isObs_fold;
+//	}
+//
+//	public void setObs_fold(boolean isObs_fold) {
+//		this.isObs_fold = isObs_fold;
+//	}
 
 	public String getHeader_name() {
 		return header_name;

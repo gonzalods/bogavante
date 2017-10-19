@@ -4,6 +4,14 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+ * RFC 7230 - 3. Message Format
+ * Request-message 	= request-line 
+ *  				  *( header-field CRLF )
+ *  				  CRLF
+ *   				  [ message-body ]
+ */
+
 public class SocketInputStream extends BufferedInputStream{
 
 	private static final byte CR = (byte)'\r';
@@ -66,7 +74,6 @@ public class SocketInputStream extends BufferedInputStream{
 	/*
 	 * RFC 7230 apartado 3.2 Header Fields
 	 * *( header-field CRLF )
-	 * OWS (Obtional white space)
 	 */
 	public void readHeader(HttpHeader httpHeader) throws IOException{
 		
@@ -94,7 +101,7 @@ public class SocketInputStream extends BufferedInputStream{
 				else {
 					//It's a obs-fold. It replaces the received obs-fold with one SP
 					//and leaves to interpretering later.
-					httpHeader.setObs_fold(true);
+					//httpHeader.setObs_fold(true);
 					lineHeadert[count++] = ' ';
 				}
 			}else if(ch == -1) throw new HttpRequestParseException(400, "Bad Request"); 
@@ -107,7 +114,7 @@ public class SocketInputStream extends BufferedInputStream{
 	}
 	
 	/*
-	 * RFC 7230 apartado 3.2.4-p4,5 Field Parsing
+	 * RFC 7230 - 3.2.4-p4,5 Field Parsing
 	 * obs-fold = CRLF 1*( SP / HTAB )
 	 */
 	private boolean is_obs_fold() throws IOException{

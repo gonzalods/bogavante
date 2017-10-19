@@ -10,8 +10,8 @@ import org.junit.Test;
 
 public class HttpRequestLineTest {
 
-	@Test
-	public void requestEmptyTest() throws IOException{
+	//@Test
+	public void testRequestEmpty() throws IOException{
 		String request = "";
 		ByteArrayInputStream in = new ByteArrayInputStream(request.getBytes());
 		SocketInputStream sis = new SocketInputStream(in, 64);
@@ -30,8 +30,8 @@ public class HttpRequestLineTest {
 	}
 	
 	
-	@Test
-	public void requestRCLFOnlyTest() throws IOException{
+//	@Test
+	public void testRequestRCLFOnly() throws IOException{
 		String request = "\r\n";
 		ByteArrayInputStream input = new ByteArrayInputStream(request.getBytes());
 		SocketInputStream sis = new SocketInputStream(input, 1024);
@@ -50,8 +50,8 @@ public class HttpRequestLineTest {
 		sis.close();
 	}
 
-	@Test
-	public void requestLineWithoutRCLFTest() throws IOException{
+//	@Test
+	public void testRequestLineWithoutRCLF() throws IOException{
 		String request = "\r\n GET /path";
 		ByteArrayInputStream input = new ByteArrayInputStream(request.getBytes());
 		SocketInputStream sis = new SocketInputStream(input, 1024);
@@ -70,8 +70,8 @@ public class HttpRequestLineTest {
 	}
 	
 	@Test
-	public void requestLineIncomplete1Test() throws IOException{
-		String request = "\r\n \u000B\rGET /path\r\n";
+	public void testRequestLineIncomplete() throws IOException{
+		String request = "GET /path";
 		ByteArrayInputStream input = new ByteArrayInputStream(request.getBytes());
 		SocketInputStream sis = new SocketInputStream(input, 1024);
 		HttpRequestLine requestLine = new HttpRequestLine();
@@ -88,9 +88,10 @@ public class HttpRequestLineTest {
 		sis.close();
 	}
 
+	
 	@Test
-	public void requestLineIncomplete2Test() throws IOException{
-		String request = "\r\nGET /path \r\n";
+	public void testRequestLineURIMalFormed() throws IOException{
+		String request = "GET /path uno/otro HTTP/1.1 ";
 		ByteArrayInputStream input = new ByteArrayInputStream(request.getBytes());
 		SocketInputStream sis = new SocketInputStream(input, 1024);
 		HttpRequestLine requestLine = new HttpRequestLine();
@@ -107,27 +108,24 @@ public class HttpRequestLineTest {
 		sis.close();
 	}
 	
-	@Test
-	public void requestLineURIMalFormedTest() throws IOException{
-		String request = "GET /path uno/otro path \r\n";
-		ByteArrayInputStream input = new ByteArrayInputStream(request.getBytes());
-		SocketInputStream sis = new SocketInputStream(input, 1024);
+	@Test 
+	public void testInvalidHttpVersion(){
+		String request ="GET / http/8";
 		HttpRequestLine requestLine = new HttpRequestLine();
 		int code = 200;
 		String text = "OK";
-		try {
-			sis.readRequestLine(requestLine);
-		} catch (HttpRequestParseException e) {
+		try{
+			requestLine.parseLine(request.toCharArray(), request.length());
+		}catch(HttpRequestParseException e){
 			code = e.getCodeError();
-			text = e.getMessage();
+			text = e.getMessage();			
 		}
 		assertThat(code, is(400));
 		assertThat(text, is("Bad Request"));
-		sis.close();
 	}
 	
 	@Test
-	public void requestLineTest() throws IOException{
+	public void testRequestLine() throws IOException{
 		String request = "\r\nGET /path\t HTTP/1.1 \r\n";
 		ByteArrayInputStream input = new ByteArrayInputStream(request.getBytes());
 		SocketInputStream sis = new SocketInputStream(input, 1024);

@@ -11,7 +11,6 @@ import org.gms.bogavante.connector.http.header.parser.ContentLengthHeaderParser;
 import org.gms.bogavante.connector.http.header.parser.HeaderParserChain;
 import org.junit.Test;
 
-import net.bytebuddy.implementation.bind.MethodDelegationBinder.ParameterBinding.Anonymous;
 
 public class ContentLengthParserTest {
 
