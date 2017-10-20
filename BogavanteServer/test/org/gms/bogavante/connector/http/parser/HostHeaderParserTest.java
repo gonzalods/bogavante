@@ -4,11 +4,13 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.header.parser.HeaderParserChain;
 import org.gms.bogavante.connector.http.header.parser.HostHeaderParser;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 import org.junit.Test;
 
 public class HostHeaderParserTest {
@@ -19,7 +21,7 @@ public class HostHeaderParserTest {
 		HttpRequest request = mock(HttpRequest.class);
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es");
-		when(request.getHeader("Host")).thenReturn("algo");
+		when(request.getHeaderValues("Host")).thenReturn(new ArrayList<>());
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		try{
@@ -38,6 +40,7 @@ public class HostHeaderParserTest {
 		// Host header alwasys required, with or without fied-value
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es/");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		try{
@@ -56,8 +59,8 @@ public class HostHeaderParserTest {
 		// Host header alwasys required, with or without fied-value
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es:8080");
-		
-		when(request.getRequestURI()).thenReturn("http://www.gms.es/casa/hab%02gonzalo.html");
+		when(request.getUri()).thenReturn("http://www.gms.es/casa/hab%02gonzalo.html");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -78,7 +81,8 @@ public class HostHeaderParserTest {
 		
 		when(request.getScheme()).thenReturn("http");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -94,9 +98,9 @@ public class HostHeaderParserTest {
 		
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es:8080");
-		
 		when(request.getScheme()).thenReturn("http");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -112,11 +116,11 @@ public class HostHeaderParserTest {
 		
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("");
-		
 		when(request.getServerName()).thenReturn("server-name");
 		when(request.getScheme()).thenReturn("http");
 		when(request.getLocalPort()).thenReturn(80);
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -132,10 +136,10 @@ public class HostHeaderParserTest {
 		
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("");
-		
 		when(request.getScheme()).thenReturn("http");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
-		when(request.getRequestURI()).thenReturn("gms.es");
+		when(request.getUri()).thenReturn("gms.es");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -152,7 +156,8 @@ public class HostHeaderParserTest {
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("");
 		when(request.getScheme()).thenReturn("http");
-		when(request.getRequestURI()).thenReturn("gms.es");
+		when(request.getUri()).thenReturn("gms.es");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -169,7 +174,8 @@ public class HostHeaderParserTest {
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es");
 		when(request.getScheme()).thenReturn("http");
-		when(request.getRequestURI()).thenReturn("gms.es:8080");
+		when(request.getUri()).thenReturn("gms.es:8080");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -186,7 +192,8 @@ public class HostHeaderParserTest {
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es");
 		when(request.getScheme()).thenReturn("http");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -205,7 +212,8 @@ public class HostHeaderParserTest {
 		when(request.getScheme()).thenReturn("http");
 		when(request.getServerName()).thenReturn("server-name");
 		when(request.getLocalPort()).thenReturn(10039);
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -221,11 +229,10 @@ public class HostHeaderParserTest {
 
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es");
-		
 		when(request.getScheme()).thenReturn("http");
-
-		when(request.getRequestURI()).thenReturn("*");
+		when(request.getUri()).thenReturn("*");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -241,9 +248,9 @@ public class HostHeaderParserTest {
 		
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("www.gms.es");
-
 		when(request.getScheme()).thenReturn("http");
-		when(request.getRequestURI()).thenReturn("*");
+		when(request.getUri()).thenReturn("*");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -259,12 +266,11 @@ public class HostHeaderParserTest {
 		
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("");
-
 		when(request.getScheme()).thenReturn("https");
 		when(request.getServerName()).thenReturn("server-name");
 		when(request.getLocalPort()).thenReturn(10042);
-		
-		when(request.getRequestURI()).thenReturn("*");
+		when(request.getUri()).thenReturn("*");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -281,10 +287,10 @@ public class HostHeaderParserTest {
 		// Host header alwasys required, with or without fied-value
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("123.125.25.3");
-		
 		when(request.getScheme()).thenReturn("http");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -301,10 +307,10 @@ public class HostHeaderParserTest {
 		// Host header alwasys required, with or without fied-value
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("123.125.25.3:8080");
-		
 		when(request.getScheme()).thenReturn("http");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -324,7 +330,8 @@ public class HostHeaderParserTest {
 		
 		when(request.getScheme()).thenReturn("http");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);
@@ -341,10 +348,10 @@ public class HostHeaderParserTest {
 		// Host header alwasys required, with or without fied-value
 		when(header.getHeader_name()).thenReturn("Host");
 		when(header.getHeader_value()).thenReturn("[45fd:47::25]:8080");
-		
 		when(request.getScheme()).thenReturn("http");
 		when(request.getAuthority()).thenReturn("gms.es:8080");
-		when(request.getRequestURI()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getUri()).thenReturn("/casa/hab%02gonzalo.html?cadena=consulta");
+		when(request.getHeaderValues("Host")).thenReturn(null);
 		
 		HostHeaderParser parser = new HostHeaderParser();
 		parser.parse(header, request);

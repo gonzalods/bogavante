@@ -1,7 +1,7 @@
 package org.gms.bogavante.connector.http.header.parser;
 
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 
 public interface HeaderParserChain {
 

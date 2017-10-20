@@ -1,7 +1,7 @@
 package org.gms.bogavante.connector.http.header.parser;
 
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 
 /*
  * RFC 7230 4.3 TE 
@@ -39,7 +39,7 @@ public class TEHeaderParser implements HeaderParserChain, TransferCodingConstant
 		String reequestHeader = header.getHeader_name();
 
 		if(reequestHeader.equalsIgnoreCase(headerName)){
-			if(request.getHeader(reequestHeader)!= null){
+			if(request.getHeaderValues(reequestHeader)!= null){
 				//TODO deciri que lógica implemantar cuando viene la cabecera duplicada.
 			}
 			String[] tCodings = ValidatorAndParseHeader

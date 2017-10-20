@@ -5,7 +5,7 @@ import org.gms.bogavante.connector.http.HttpRequestLine;
 
 public class HttpProcessorFactory {
 
-	public static RequestProcessor getHttpProcesor(HttpRequestLine requestLine, HttpConnector connector){
+	public static HttpRequestProcessor getHttpProcesor(HttpRequestLine requestLine, HttpConnector connector){
 		
 		return null;
 	}

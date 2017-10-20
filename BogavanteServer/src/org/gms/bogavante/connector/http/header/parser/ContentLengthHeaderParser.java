@@ -1,10 +1,11 @@
 package org.gms.bogavante.connector.http.header.parser;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 
 public class ContentLengthHeaderParser implements HeaderParserChain {
 
@@ -32,11 +33,12 @@ public class ContentLengthHeaderParser implements HeaderParserChain {
 			 * (If they have different values reject de message as invalid. In object Request
 			 * insert the value of the header of the request).
 			 */
-			String existingValue = request.getHeader(header.getHeader_name());
-			if(existingValue == null){
+			List<String> listValues = request.getHeaderValues(header.getHeader_name());
+			if(listValues == null){
 				request.setHeader(header.getHeader_name(), valueHeader);
 				request.setContentLength(contentLength);
 			} else {
+				String existingValue = listValues.get(0);
 				if(!existingValue.equals(String.valueOf(contentLength))){
 					throw new HttpRequestParseException(400, "Bad Request");
 				}

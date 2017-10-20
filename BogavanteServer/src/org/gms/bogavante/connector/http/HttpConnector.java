@@ -27,8 +27,10 @@ public class HttpConnector implements Runnable{
 			while(!stopped){
 				try(Socket socket = serverSocket.accept()){
 			
-					HttpProcessor processor = new HttpProcessor(this);
+					HttpContext context = new HttpContext(scheme);
+					HttpProcessor processor = new HttpProcessor(context);
 					processor.process(socket);
+					
 				}catch(IOException e){
 					continue;
 				}

@@ -4,11 +4,14 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
+
 import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.header.parser.ContentLengthHeaderParser;
 import org.gms.bogavante.connector.http.header.parser.HeaderParserChain;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 import org.junit.Test;
 
 
@@ -20,7 +23,7 @@ public class ContentLengthParserTest {
 		HttpRequest request = mock(HttpRequest.class);
 		when(header.getHeader_name()).thenReturn("Content-Length");
 		when(header.getHeader_value()).thenReturn("24586");
-		when(request.getHeader("Content-Length")).thenReturn(null);
+		when(request.getHeaderValues("Content-Length")).thenReturn(null);
 		
 		ContentLengthHeaderParser parser = new ContentLengthHeaderParser();
 		parser.parse(header, request);
@@ -35,7 +38,7 @@ public class ContentLengthParserTest {
 		HttpRequest request = mock(HttpRequest.class);
 		when(header.getHeader_name()).thenReturn("Content-Length");
 		when(header.getHeader_value()).thenReturn("9223372036854775808");
-		when(request.getHeader("Content-Length")).thenReturn(null);
+		when(request.getHeaderValues("Content-Length")).thenReturn(null);
 		
 		ContentLengthHeaderParser parser = new ContentLengthHeaderParser();
 		parser.parse(header, request);
@@ -50,7 +53,7 @@ public class ContentLengthParserTest {
 		HttpRequest request = mock(HttpRequest.class);
 		when(header.getHeader_name()).thenReturn("Content-Length");
 		when(header.getHeader_value()).thenReturn("24586,24586");
-		when(request.getHeader("Content-Length")).thenReturn(null);
+		when(request.getHeaderValues("Content-Length")).thenReturn(null);
 		
 		ContentLengthHeaderParser parser = new ContentLengthHeaderParser();
 		parser.parse(header, request);
@@ -65,7 +68,7 @@ public class ContentLengthParserTest {
 		HttpRequest request = mock(HttpRequest.class);
 		when(header.getHeader_name()).thenReturn("Content-Length");
 		when(header.getHeader_value()).thenReturn("24586,24585");
-		when(request.getHeader("Content-Length")).thenReturn(null);
+		when(request.getHeaderValues("Content-Length")).thenReturn(null);
 		
 		ContentLengthHeaderParser parser = new ContentLengthHeaderParser();
 		try{
@@ -82,9 +85,10 @@ public class ContentLengthParserTest {
 	public void testContentLengthDuplicateEqual() {
 		HttpHeader header = mock(HttpHeader.class);
 		HttpRequest request = mock(HttpRequest.class);
+		
 		when(header.getHeader_name()).thenReturn("Content-Length");
 		when(header.getHeader_value()).thenReturn("24586,24586");
-		when(request.getHeader("Content-Length")).thenReturn("24586");
+		when(request.getHeaderValues("Content-Length")).thenReturn(Arrays.asList("24586"));
 		
 		ContentLengthHeaderParser parser = new ContentLengthHeaderParser();
 		parser.parse(header, request);
@@ -99,7 +103,7 @@ public class ContentLengthParserTest {
 		HttpRequest request = mock(HttpRequest.class);
 		when(header.getHeader_name()).thenReturn("Content-Length");
 		when(header.getHeader_value()).thenReturn("24586");
-		when(request.getHeader("Content-Length")).thenReturn("24585");
+		when(request.getHeaderValues("Content-Length")).thenReturn(Arrays.asList("24585"));
 		
 		ContentLengthHeaderParser parser = new ContentLengthHeaderParser();
 		try{

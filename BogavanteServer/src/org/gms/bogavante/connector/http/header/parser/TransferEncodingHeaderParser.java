@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 
 /*
  * RFC 7230 3.3.1. Transfer-Encoding 

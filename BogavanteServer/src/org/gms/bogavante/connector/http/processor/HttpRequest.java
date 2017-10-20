@@ -1,5 +1,6 @@
 package org.gms.bogavante.connector.http.processor;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 
 public class HttpRequest {
 
+	private InputStream input;
 	protected HashMap<HeaderName, List<String>> headers = new HashMap<>();
 	protected List<String> cookies = new ArrayList<>();
 	private String scheme;
@@ -14,6 +16,8 @@ public class HttpRequest {
 	private String uri;
 	private String queryString;
 	private long contentLength;
+	private int localPort;
+	private String serverName;
 
 	private String effectiveRequestURI;
 	private String authority;
@@ -67,7 +71,19 @@ public class HttpRequest {
 		HeaderName header_name = new HeaderName(name);
 		return headers.get(header_name);
 	}
-	
+	public int getLocalPort() {
+		return localPort;
+	}
+	public void setLocalPort(int localPort) {
+		this.localPort = localPort;
+	}
+	public String getServerName() {
+		return serverName;
+	}
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
 	/* 
 	 * Class repersenting a header name case insensitive.
 	 * It's used as key of the Map containing de request's headers.

@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 
 public class HostHeaderParser implements HeaderParserChain {
 
@@ -24,14 +24,14 @@ public class HostHeaderParser implements HeaderParserChain {
 		if(headersApply.contains(header.getHeader_name().toLowerCase())){
 			
 			// TODO Caberera Host duplicada
-			if(request.getHeader(header.getHeader_name()) != null){
+			if(request.getHeaderValues(header.getHeader_name()) != null){
 				throw new HttpRequestParseException(400, "Bad Request");
 			}
 			String hostHeaderValue = header.getHeader_value();
 			if(!validateHostHeaderValue(hostHeaderValue)){
 				throw new HttpRequestParseException(400, "Bad Request");
 			}
-			String rawUri = request.getRequestURI();
+			String rawUri = request.getUri();
 			/*
 			 * RFC 7230 apartado 5.5. Effective Request URI
 			 * Un servidor debe recostruir la URI de la petición recibida como una

@@ -1,7 +1,7 @@
 package org.gms.bogavante;
 
-import org.gms.bogavante.connector.http.HttpRequest;
-import org.gms.bogavante.connector.http.HttpResponse;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
+import org.gms.bogavante.connector.http.processor.HttpResponse;
 
 public class StaticResourceProcessor {
 

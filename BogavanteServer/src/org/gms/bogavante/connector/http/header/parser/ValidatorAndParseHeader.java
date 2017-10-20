@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
+import org.gms.bogavante.connector.http.processor.HttpRequest;
 
 public class ValidatorAndParseHeader {
 

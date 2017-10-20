@@ -7,6 +7,7 @@ import java.net.Socket;
 import javax.servlet.ServletException;
 
 import org.gms.bogavante.connector.http.HttpConnector;
+import org.gms.bogavante.connector.http.HttpContext;
 import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequest;
 import org.gms.bogavante.connector.http.HttpRequestLine;
@@ -17,13 +18,10 @@ import org.gms.bogavante.connector.http.header.parser.ValidatorAndParseHeader;
 
 public class HttpProcessor {
 
-	private HttpConnector connector;
-	private HttpRequest request;
-	private HttpResponse response;
-	private HttpRequestLine requestLine = new HttpRequestLine();
+	private HttpContext httpContext;
 
-	public HttpProcessor(HttpConnector connector) {
-		this.connector = connector;
+	public HttpProcessor(HttpContext httpContext) {
+		this.httpContext = httpContext;
 	}
 
 	public void process(Socket socket) {
@@ -33,16 +31,12 @@ public class HttpProcessor {
 			
 			boolean keepAlive = true;
 			while(keepAlive){
-				request = new HttpRequest(input,connector.getScheme());
-	
-				response = new HttpResponse(output);
-				response.setRequest(request);
-	
-				response.setHeader("Server", "Bogavante Server");
-	
+
 				try{
-					parseRequestLine(input);
-					parseHeader(input);
+//					parseRequestLine(input);
+//					parseHeader(input);
+					HttpRequestProcessor requestProcessor = httpContext.getRequestProcesor(input,output);
+					requestProcessor.process();
 				}catch(HttpRequestParseException e){
 					String statusLine = createStatusLine(e.getCodeError(), e.getMessage());
 					output.write(statusLine.getBytes());
@@ -71,31 +65,31 @@ public class HttpProcessor {
 		}
 	}
 
-	private void parseRequestLine(SocketInputStream input) throws IOException, ServletException {
-		
-		input.readRequestLine(requestLine);
-		request.setMethod(requestLine.getMethod());
-		request.setRequestURI(requestLine.getRequest_target());
-		
-		
-	}
+//	private void parseRequestLine(SocketInputStream input) throws IOException, ServletException {
+//		
+//		input.readRequestLine(requestLine);
+//		request.setMethod(requestLine.getMethod());
+//		request.setRequestURI(requestLine.getRequest_target());
+//		
+//		
+//	}
 
-	private void parseHeader(SocketInputStream input) throws IOException, ServletException {
-		ValidatorAndParseHeader parser = new ValidatorAndParseHeader();
-		while(true){
-			HttpHeader header = new HttpHeader();
-
-			input.readHeader(header);
-			parser.validateAndParse(request, header);
-			
-			if(header.getHeader_name() == null){// End of header section
-				break;
-			}
-		}
-		if(request.getEffectiveRequestURI()==null){//No Host header field
-			throw new HttpRequestParseException(400, "Bad Request");
-		}
-	}
+//	private void parseHeader(SocketInputStream input) throws IOException, ServletException {
+//		ValidatorAndParseHeader parser = new ValidatorAndParseHeader();
+//		while(true){
+//			HttpHeader header = new HttpHeader();
+//
+//			input.readHeader(header);
+//			parser.validateAndParse(request, header);
+//			
+//			if(header.getHeader_name() == null){// End of header section
+//				break;
+//			}
+//		}
+//		if(request.getEffectiveRequestURI()==null){//No Host header field
+//			throw new HttpRequestParseException(400, "Bad Request");
+//		}
+//	}
 	
 	private String createStatusLine(int code, String message){
 		StringBuilder statusLine = new StringBuilder("HTTP/1.1 ")
