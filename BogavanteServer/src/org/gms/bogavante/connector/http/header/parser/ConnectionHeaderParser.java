@@ -25,7 +25,7 @@ public class ConnectionHeaderParser implements HeaderParserChain {
 			if(request.getHeaderValues(reequestHeader)!= null){
 				//TODO decidir que lógica implemantar cuando viene la cabecera duplicada.
 			}
-			String[] tCodings = ValidatorAndParseHeader
+			String[] tCodings = Http1ValidatorAndParseHeader
 					.parseCommaDelimitedList(header.getHeader_value(),true);
 			
 			request.setHeader(header.getHeader_name(), tCodings);

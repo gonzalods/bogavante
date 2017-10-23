@@ -1,4 +1,4 @@
-package org.gms.bogavante.connector.http;
+package org.gms.bogavante.connector.http.processor;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

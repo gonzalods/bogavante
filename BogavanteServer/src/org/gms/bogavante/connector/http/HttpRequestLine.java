@@ -1,5 +1,7 @@
 package org.gms.bogavante.connector.http;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +43,9 @@ public class HttpRequestLine {
 	}
 
 	private void validateRequestTarget(){
-		if(request_target.length() > MAX_LENGTH_URI)
+		if(request_target.length() > MAX_LENGTH_URI){
 			throw new HttpRequestParseException(414, "URI Too Long");
+		}
 	}
 	
 	/*

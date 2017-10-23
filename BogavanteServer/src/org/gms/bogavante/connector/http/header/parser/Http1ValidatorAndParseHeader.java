@@ -8,11 +8,11 @@ import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.processor.HttpRequest;
 
-public class ValidatorAndParseHeader {
+public class Http1ValidatorAndParseHeader {
 
 	private HeaderParserChain nextParseHeader;
 	
-	public ValidatorAndParseHeader(){
+	public Http1ValidatorAndParseHeader(){
 		init();
 	}
 	/*

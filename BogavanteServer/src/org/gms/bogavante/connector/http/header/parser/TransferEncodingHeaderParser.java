@@ -49,7 +49,7 @@ public class TransferEncodingHeaderParser implements HeaderParserChain, Transfer
 	public void parse(HttpHeader header, HttpRequest request) {
 		
 		if(header.getHeader_name().equalsIgnoreCase(headerName)){
-			String[] codings = ValidatorAndParseHeader
+			String[] codings = Http1ValidatorAndParseHeader
 					.parseCommaDelimitedList(header.getHeader_value(),true);
 			validateListCodign(codings);
 			

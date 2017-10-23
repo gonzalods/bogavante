@@ -14,7 +14,7 @@ import org.gms.bogavante.connector.http.HttpRequestLine;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.HttpResponse;
 import org.gms.bogavante.connector.http.SocketInputStream;
-import org.gms.bogavante.connector.http.header.parser.ValidatorAndParseHeader;
+import org.gms.bogavante.connector.http.header.parser.Http1ValidatorAndParseHeader;
 
 public class HttpProcessor {
 

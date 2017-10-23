@@ -21,6 +21,11 @@ public class HttpRequest {
 
 	private String effectiveRequestURI;
 	private String authority;
+	
+	public HttpRequest(InputStream input){
+		this.input = input;
+	}
+	
 	public String getScheme() {
 		return scheme;
 	}
