@@ -8,7 +8,7 @@ import org.gms.bogavante.connector.http.HttpContext;
 import org.gms.bogavante.connector.http.HttpHeader;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.SocketInputStream;
-import org.gms.bogavante.connector.http.header.parser.ValidatorAndParseHeader;
+import org.gms.bogavante.connector.http.header.parser.Http1ValidatorAndParseHeader;
 
 
 public class Http1RequestProcessor implements HttpRequestProcessor {
@@ -16,9 +16,13 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 	private HttpContext context;
 	private HttpRequest request;
 	private HttpResponse response;
+	private Http1ValidatorAndParseHeader headerParser;
+	private Http1RequestLineValidatorAndParser lineRequestParser;
 	
 	private SocketInputStream input;
 	private OutputStream output;
+	
+	private StaticResourceProcessor staticResourceProcessor;
 	
 	public Http1RequestProcessor(HttpContext context) {
 		this.context = context;
@@ -26,21 +30,22 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 	
 	@Override
 	public void process() throws IOException{
-		
-		parseHeader();
-		
-		StaticResourceProcessor processor = new StaticResourceProcessor();
-		processor.process(request, response);
+		validateAndParseRequestLine();
+		validateAndParseHeader();
+		staticResourceProcessor.process(request, response);
 
 	}
 	
-	private void parseHeader() throws IOException{
-		ValidatorAndParseHeader parser = new ValidatorAndParseHeader();
+	private void validateAndParseRequestLine(){
+		
+	}
+	
+	private void validateAndParseHeader() throws IOException{
 		while(true){
 			HttpHeader header = new HttpHeader();
 
 			input.readHeader(header);
-			parser.validateAndParse(request, header);
+			headerParser.validateAndParse(request, header);
 			
 			if(header.getHeader_name() == null){// End of header section
 				break;
@@ -58,7 +63,15 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 	public void setResponset(HttpResponse response){
 		this.response = response;
 	}
+	
+	public void setStaticResourceProcessor(StaticResourceProcessor staticResourceProcessor){
+		this.staticResourceProcessor = staticResourceProcessor;
+	}
 
+	public void setValidatorAndParserRequestLine(){
+		
+	}
+	
 	@Override
 	public void setInputStream(SocketInputStream input) {
 		this.input = input;
@@ -68,6 +81,11 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 	public void setOutputStream(OutputStream output) {
 		this.output = output;
 		
+	}
+
+	@Override
+	public boolean isKeepAlive() {
+		return false;
 	}
 
 }

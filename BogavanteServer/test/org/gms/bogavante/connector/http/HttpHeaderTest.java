@@ -3,7 +3,6 @@ package org.gms.bogavante.connector.http;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.junit.Test;

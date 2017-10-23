@@ -1,20 +1,11 @@
 package org.gms.bogavante.connector.http.processor;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import javax.servlet.ServletException;
-
-import org.gms.bogavante.connector.http.HttpConnector;
 import org.gms.bogavante.connector.http.HttpContext;
-import org.gms.bogavante.connector.http.HttpHeader;
-import org.gms.bogavante.connector.http.HttpRequest;
-import org.gms.bogavante.connector.http.HttpRequestLine;
 import org.gms.bogavante.connector.http.HttpRequestParseException;
-import org.gms.bogavante.connector.http.HttpResponse;
 import org.gms.bogavante.connector.http.SocketInputStream;
-import org.gms.bogavante.connector.http.header.parser.ValidatorAndParseHeader;
 
 public class HttpProcessor {
 
@@ -37,15 +28,20 @@ public class HttpProcessor {
 //					parseHeader(input);
 					HttpRequestProcessor requestProcessor = httpContext.getRequestProcesor(input,output);
 					requestProcessor.process();
+					keepAlive = requestProcessor.isKeepAlive();
 				}catch(HttpRequestParseException e){
 					String statusLine = createStatusLine(e.getCodeError(), e.getMessage());
 					output.write(statusLine.getBytes());
-					return;
+					keepAlive = false;
+				}catch(Exception e) {
+					String statusLine = createStatusLine(500, "Server Error");
+					output.write(statusLine.getBytes());
+					keepAlive = false;
 				}
 				
 				//TODO Temporal hasta que se implemente HttpResponse
-				String statusLine = createStatusLine(200, "OK");
-				output.write(statusLine.getBytes());
+//				String statusLine = createStatusLine(200, "OK");
+//				output.write(statusLine.getBytes());
 				
 	//			if (request.getRequestURI().startsWith("/servlet/")) {
 	//				ServletProcessor processor = new ServletProcessor();
@@ -56,7 +52,7 @@ public class HttpProcessor {
 	//			}
 //				String connection = request.getHeader("Connection");
 //				if(connection != null && connection.equals("close")){
-					keepAlive = false;
+//					keepAlive = true;
 //				}
 			}
 			//socket.close();
@@ -93,7 +89,8 @@ public class HttpProcessor {
 	
 	private String createStatusLine(int code, String message){
 		StringBuilder statusLine = new StringBuilder("HTTP/1.1 ")
-				.append(code).append(' ').append(message).append("\r\n");
+				.append(code).append(' ').append(message).append("\r\n")
+				.append("Connection: close\r\n\r\n");
 		return statusLine.toString();
 	}
 }

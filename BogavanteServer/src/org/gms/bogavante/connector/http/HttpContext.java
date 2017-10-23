@@ -1,13 +1,13 @@
 package org.gms.bogavante.connector.http;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.gms.bogavante.StaticResourceProcessor;
 import org.gms.bogavante.connector.http.processor.Http1RequestProcessor;
 import org.gms.bogavante.connector.http.processor.HttpRequest;
-import org.gms.bogavante.connector.http.processor.HttpResponse;
 import org.gms.bogavante.connector.http.processor.HttpRequestProcessor;
+import org.gms.bogavante.connector.http.processor.HttpResponse;
 
 public class HttpContext {
 	
@@ -31,13 +31,17 @@ public class HttpContext {
 		String versión = requestLine.getHTTP_version();
 		if(versión.matches(HTTP_VERSION_1_PATTERN)){
 			Http1RequestProcessor requestProcesor = new Http1RequestProcessor(this);
-			requestProcesor.setRequest(new HttpRequest());
-			requestProcesor.setResponset(new HttpResponse());
+			HttpRequest req = new HttpRequest(input);
+			req.setScheme(scheme);
+			requestProcesor.setRequest(req);
+			requestProcesor.setResponset(new HttpResponse(output,req));
+			requestProcesor.setInputStream(input);
+			requestProcesor.setOutputStream(output);
+			requestProcesor.setStaticResourceProcessor(new StaticResourceProcessor());
 			return requestProcesor;
 		}else{
-			
+			throw new HttpRequestParseException(505, "HTTP Version Not Supported");
 		}
-		return null;
 	}
 	
 	public String getScheme(){

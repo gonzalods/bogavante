@@ -10,5 +10,6 @@ public interface HttpRequestProcessor {
 	public void process() throws IOException;
 	public void setInputStream(SocketInputStream input);
 	public void setOutputStream(OutputStream output);
+	public boolean isKeepAlive();
 	
 }
