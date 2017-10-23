@@ -60,39 +60,6 @@ public class HttpRequestLineTest {
 	}
 	
 	@Test
-	public void invalidRequestTarget(){
-		String request ="GET http:///path?query HTTP/1.1";
-		HttpRequestLine requestLine = new HttpRequestLine();
-		int code = 200;
-		String text = "OK";
-		try{
-			requestLine.parseLine(request.toCharArray(), request.length());
-		}catch(HttpRequestParseException e){
-			code = e.getCodeError();
-			text = e.getMessage();			
-		}
-		assertThat(code, is(400));
-		assertThat(text, is("Bad Request"));
-		
-	}
-	
-	@Test
-	public void invalidRequestTargetWithUserInfo(){
-		String request ="GET http://user:pass@www.algo.com/path?query HTTP/1.1";
-		HttpRequestLine requestLine = new HttpRequestLine();
-		int code = 200;
-		String text = "OK";
-		try{
-			requestLine.parseLine(request.toCharArray(), request.length());
-		}catch(HttpRequestParseException e){
-			code = e.getCodeError();
-			text = e.getMessage();			
-		}
-		assertThat(code, is(400));
-		assertThat(text, is("Bad Request"));
-		
-	}
-	@Test
 	public void testRequestLine() throws IOException{
 		String request = "GET /path\t HTTP/1.1 ";
 		HttpRequestLine requestLine = new HttpRequestLine();
