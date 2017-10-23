@@ -210,26 +210,4 @@ public class HttpProcessorTest {
 		
 	}
 	
-//	@Test
-	public void testTwoHeaderWithObsFold() throws IOException{
-		HttpProcessor processor = new HttpProcessor(null);
-		String request = "GET / HTTP/1.1\r\nContent-Type: text/html,\r\n */*\r\nHost: www.google.es\r\n\r\n";
-		Socket socket = mock(Socket.class);
-		
-		ByteArrayInputStream in = new ByteArrayInputStream(request.getBytes());
-		when(socket.getInputStream()).thenReturn(in);
-		when(socket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
-		
-		processor.process(socket);
-		
-		ByteArrayOutputStream out = (ByteArrayOutputStream)socket.getOutputStream();
-		
-		String responseStatus = new String(out.toByteArray());
-		
-		assertThat(responseStatus, is("HTTP/1.1 200 OK\r\n"));
-		
-		out.close();
-		in.close();
-		
-	}
 }
