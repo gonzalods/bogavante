@@ -23,7 +23,7 @@ public class TrailerHeadersValidatorAndParser {
 	private void init(){
 		forbiddenHeaders = new HashSet<>();
 		forbiddenHeaders.add("transfer-encoding");
-		forbiddenHeaders.add("Content-Length");
+		forbiddenHeaders.add("content-length");
 		forbiddenHeaders.add("host");
 		forbiddenHeaders.add("content-encoding");
 		forbiddenHeaders.add("content-type");

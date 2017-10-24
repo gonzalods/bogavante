@@ -13,7 +13,7 @@ import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.SocketInputStream;
 import org.gms.bogavante.connector.http.processor.HttpRequest;
 
-public class ChunkedEncodingBody implements TransferEncodingBody {
+public class ChunkedDecodingBody implements TransferEncodingBody {
 
 	private static final byte CR = (byte)'\r';
 	private static final byte LF = (byte)'\n';
@@ -42,12 +42,19 @@ public class ChunkedEncodingBody implements TransferEncodingBody {
 		List<String> trailerValues = request.getHeaderValues("Trailer");  
 		if(trailerValues != null && !trailerValues.isEmpty()){
 			readTrailerPart(input,request,trailerValues);
+		}else {
+			input.read();
+			input.read();
 		}
+		request.setContentLength(payloadSize);
+		request.setHeader("Content-Length", String.valueOf(payloadSize));
+		request.removeHeader("Trailer");
 		
-		
+		ByteArrayInputStream newInput = new ByteArrayInputStream(payload);
 		if(nextEncodingBody != null){
-			ByteArrayInputStream newInput = new ByteArrayInputStream(payload);
 			nextEncodingBody.decodeBody(newInput, request);
+		}else {
+			request.setInputStream(newInput);
 		}
 	}
 
@@ -78,8 +85,9 @@ public class ChunkedEncodingBody implements TransferEncodingBody {
 					chunk_ext = aux.toString();
 				}
 				break;
+			}else {
+				aux.append((char)ch);
 			}
-			aux.append((char)ch);
 		}
 		parseChunkExt(chunk_ext);
 		return chunkSize;

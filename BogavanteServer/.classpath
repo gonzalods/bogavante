@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/javax.servlet-api-4.0.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-core-2.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/objenesis-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/loremipsum-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

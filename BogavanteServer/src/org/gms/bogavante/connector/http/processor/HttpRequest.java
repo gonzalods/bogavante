@@ -26,6 +26,9 @@ public class HttpRequest {
 		this.input = input;
 	}
 	
+	public void setInputStream(InputStream input) {
+		this.input = input;
+	}
 	public String getScheme() {
 		return scheme;
 	}
@@ -75,6 +78,10 @@ public class HttpRequest {
 	public List<String> getHeaderValues(String name){
 		HeaderName header_name = new HeaderName(name);
 		return headers.get(header_name);
+	}
+	public void removeHeader(String name) {
+		HeaderName header_name = new HeaderName(name);
+		headers.remove(header_name);
 	}
 	public int getLocalPort() {
 		return localPort;
