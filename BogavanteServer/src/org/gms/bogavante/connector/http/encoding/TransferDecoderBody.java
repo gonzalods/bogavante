@@ -5,8 +5,8 @@ import java.io.InputStream;
 
 import org.gms.bogavante.connector.http.processor.HttpRequest;
 
-public interface TransferEncodingBody {
+public interface TransferDecoderBody {
 
 	public void decodeBody(InputStream input, HttpRequest request) throws IOException;
-	public void nextEncoding(TransferEncodingBody next);
+	public void nextEncoding(TransferDecoderBody next);
 }

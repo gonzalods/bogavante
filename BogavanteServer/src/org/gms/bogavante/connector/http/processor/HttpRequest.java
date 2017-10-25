@@ -26,6 +26,9 @@ public class HttpRequest {
 		this.input = input;
 	}
 	
+	public InputStream getInputStream() {
+		return this.input;
+	}
 	public void setInputStream(InputStream input) {
 		this.input = input;
 	}

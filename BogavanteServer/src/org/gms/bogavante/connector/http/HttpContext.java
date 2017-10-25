@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.gms.bogavante.StaticResourceProcessor;
+import org.gms.bogavante.connector.http.processor.Http1MessageBodyProcessor;
 import org.gms.bogavante.connector.http.processor.Http1RequestProcessor;
 import org.gms.bogavante.connector.http.processor.HttpRequest;
 import org.gms.bogavante.connector.http.processor.HttpRequestProcessor;
@@ -37,6 +38,7 @@ public class HttpContext {
 			requestProcesor.setResponset(new HttpResponse(output,req));
 			requestProcesor.setInputStream(input);
 			requestProcesor.setOutputStream(output);
+			requestProcesor.setMessageBodyProcessor(new Http1MessageBodyProcessor());
 			requestProcesor.setStaticResourceProcessor(new StaticResourceProcessor());
 			return requestProcesor;
 		}else{

@@ -13,22 +13,23 @@ import org.gms.bogavante.connector.http.HttpRequestParseException;
 import org.gms.bogavante.connector.http.SocketInputStream;
 import org.gms.bogavante.connector.http.processor.HttpRequest;
 
-public class ChunkedDecodingBody implements TransferEncodingBody {
+public class ChunkedDecoderBody implements TransferDecoderBody {
 
 	private static final byte CR = (byte)'\r';
 	private static final byte LF = (byte)'\n';
 	private static final byte SC = (byte)';';
+	private static final int BUFF_INI_LENGTH = 16384; 
 	
-	private byte[] payload = new byte[16384];
-	private TransferEncodingBody nextEncodingBody;
+	private TransferDecoderBody nextEncodingBody;
 	
-	private int payloadSize = 0;
 	private Map<String, String> mapChunkExt = new LinkedHashMap<>();
 	private TrailerHeadersValidatorAndParser trailerHeadersParser;
 
 	@Override
 	public void decodeBody(InputStream input, HttpRequest request) throws IOException{
-
+		byte[] payload = new byte[BUFF_INI_LENGTH];
+		int payloadSize = 0;
+		
 		int chunkSize = readChunkSize(input);
 		while(chunkSize > 0){
 			byte[] chunkData = readChunkData(input, chunkSize);
@@ -46,20 +47,21 @@ public class ChunkedDecodingBody implements TransferEncodingBody {
 			input.read();
 			input.read();
 		}
-		request.setContentLength(payloadSize);
-		request.setHeader("Content-Length", String.valueOf(payloadSize));
 		request.removeHeader("Trailer");
 		
+		payload = Arrays.copyOf(payload, payloadSize);
 		ByteArrayInputStream newInput = new ByteArrayInputStream(payload);
 		if(nextEncodingBody != null){
 			nextEncodingBody.decodeBody(newInput, request);
 		}else {
+			request.setContentLength(payloadSize);
+			request.setHeader("Content-Length", String.valueOf(payloadSize));
 			request.setInputStream(newInput);
 		}
 	}
 
 	@Override
-	public void nextEncoding(TransferEncodingBody next) {
+	public void nextEncoding(TransferDecoderBody next) {
 		this.nextEncodingBody = next;
 		
 	}
@@ -129,5 +131,9 @@ public class ChunkedDecodingBody implements TransferEncodingBody {
 				break;
 			}
 		}
+	}
+	
+	public void setTrailerHeadersParser(TrailerHeadersValidatorAndParser parser){
+		this.trailerHeadersParser = parser;
 	}
 }

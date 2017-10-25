@@ -2,6 +2,7 @@ package org.gms.bogavante.connector.http.processor;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.gms.bogavante.StaticResourceProcessor;
 import org.gms.bogavante.connector.http.HttpContext;
@@ -18,6 +19,7 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 	private HttpResponse response;
 	private Http1ValidatorAndParseHeader headerParser;
 	private Http1RequestLineValidatorAndParser lineRequestParser;
+	private Http1MessageBodyProcessor messageBodyProcessor;
 	
 	private SocketInputStream input;
 	private OutputStream output;
@@ -31,16 +33,17 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 	@Override
 	public void process() throws IOException{
 		validateAndParseRequestLine();
-		validateAndParseHeader();
+		validateAndParseHeaders();
+		messageBodyProcessor.process(input, request);
 		staticResourceProcessor.process(request, response);
 
 	}
 	
 	private void validateAndParseRequestLine(){
-		
+		lineRequestParser.validateAndParse(request, context.getRequesLine());
 	}
 	
-	private void validateAndParseHeader() throws IOException{
+	private void validateAndParseHeaders() throws IOException{
 		while(true){
 			HttpHeader header = new HttpHeader();
 
@@ -72,6 +75,10 @@ public class Http1RequestProcessor implements HttpRequestProcessor {
 		
 	}
 	
+	public void setMessageBodyProcessor(Http1MessageBodyProcessor messageBodyProcessor) {
+		this.messageBodyProcessor = messageBodyProcessor;
+	}
+
 	@Override
 	public void setInputStream(SocketInputStream input) {
 		this.input = input;
