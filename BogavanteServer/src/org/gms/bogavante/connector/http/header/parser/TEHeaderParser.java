@@ -2,8 +2,6 @@ package org.gms.bogavante.connector.http.header.parser;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +32,7 @@ public class TEHeaderParser implements HeaderParserChain, TransferCodingConstant
 //	public final static String TRAILERS = "trailers";
 
 //	private final static String RANK_PATTERN = "([ \t];[ \t][qQ]=(0(\\.\\d{0,3})?)|(1(\\.0{0,3})?))?";
-	private final static String RANK_PATTERN = "([ \t][qQ]=(0(\\.\\d{0,3})?)|(1(\\.0{0,3})?))?";
+	private final static String RANK_PATTERN = "[ \t]?[qQ]=((0(\\.\\d{0,3})?)|(1(\\.0{0,3})?))[ \t]?";
 //	private final static String FIXED_TRANSFER_CODINGS_RANK_PATTERN =
 //		"(trailers)|(((compress)|(deflate)|(gzip)|(x-compress)|(x-zip))" + RANK_PATTERN + ")";
 //	private final static String TRANSFER_CODING_EXT_RANK_PATTERN = 
@@ -70,9 +68,9 @@ public class TEHeaderParser implements HeaderParserChain, TransferCodingConstant
 			return teCodings;
 		}
 		List<String> newValues = new ArrayList<>();
-		Pattern pattern = Pattern.compile(RANK_PATTERN);
+		Pattern rankPattern = Pattern.compile(RANK_PATTERN);
 		for (String teCoding : teCodings) {
-			Matcher matcher = pattern.matcher(teCoding);
+			Matcher matcher = rankPattern.matcher(teCoding);
 			String stRank = "1";
 			if(matcher.find()){
 				stRank = matcher.group().trim().split("=")[1];
@@ -81,15 +79,17 @@ public class TEHeaderParser implements HeaderParserChain, TransferCodingConstant
 			values.forEach((coding) -> {
 				String[] arrTeCoding = teCoding.split(";");
 				if(coding.contains(arrTeCoding[0])){
-					Matcher matcher2 = pattern.matcher(teCoding);
+					Matcher matcher2 = rankPattern.matcher(teCoding);
 					BigDecimal rankOld = BigDecimal.ONE;
 					if(matcher2.find()){
-						rankOld = new BigDecimal(matcher.group().trim());
+						rankOld = new BigDecimal(matcher.group().trim().split("=")[1]);
 						if(rankOld.compareTo(rankNew) == -1){
 							newValues.add(teCoding);
 						}else{
 							newValues.add(coding);
 						}
+					}else {
+						newValues.add(teCoding);
 					}
 				}else{
 					newValues.add(teCoding);
